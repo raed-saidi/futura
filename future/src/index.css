@@ -23,6 +23,28 @@
   --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 }
 
+.dark {
+  --background: #121212;
+  --foreground: #f5f5f5;
+  --card: #1e1e1e;
+  --card-foreground: #f5f5f5;
+  --popover: #1e1e1e;
+  --popover-foreground: #f5f5f5;
+  --primary: #00a0ff;
+  --primary-foreground: #fafafa;
+  --secondary: #7c00ff;
+  --secondary-foreground: #fafafa;
+  --muted: #2a2a2a;
+  --muted-foreground: #a0a0a0;
+  --accent: #2a2a2a;
+  --accent-foreground: #f5f5f5;
+  --destructive: #ff4d4d;
+  --destructive-foreground: #fafafa;
+  --border: #333333;
+  --input: #333333;
+  --ring: #00a0ff;
+}
+
 /* Base Styles */
 * {
   box-sizing: border-box;
@@ -41,6 +63,7 @@ body {
   background-color: var(--background);
   color: var(--foreground);
   line-height: 1.5;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 a {
@@ -103,6 +126,11 @@ ul {
   border-bottom: 1px solid var(--border);
   background-color: rgba(255, 255, 255, 0.8);
   backdrop-filter: blur(8px);
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.dark .header {
+  background-color: rgba(18, 18, 18, 0.8);
 }
 
 .header-container {
@@ -170,7 +198,9 @@ ul {
   border-radius: 9999px;
   border: 1px solid var(--input);
   background-color: var(--background);
+  color: var(--foreground);
   font-size: 0.875rem;
+  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
 }
 
 .search-input:focus {
@@ -187,7 +217,7 @@ ul {
   height: 2.5rem;
   border-radius: var(--radius);
   color: var(--foreground);
-  transition: background-color 0.2s;
+  transition: background-color 0.2s, color 0.2s;
 }
 
 .icon-button:hover {
@@ -210,16 +240,54 @@ ul {
   height: 1rem;
 }
 
+/* Theme Toggle */
+.theme-toggle {
+  position: relative;
+  overflow: hidden;
+}
+
+.theme-toggle::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background-color: var(--accent);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.5s ease, height 0.5s ease;
+  z-index: -1;
+}
+
+.theme-toggle:hover::after {
+  width: 200%;
+  height: 200%;
+}
+
 /* Hero Section */
 .hero-section {
   position: relative;
   height: 70vh;
+  overflow: hidden;
+}
+
+.hero-carousel {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  display: block;
 }
 
 .hero-gradient {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to right, rgba(0, 160, 255, 0.2), rgba(124, 0, 255, 0.2));
+  background: linear-gradient(to right, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.4));
+  z-index: 1;
+}
+
+.dark .hero-gradient {
+  background: linear-gradient(to right, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.5));
 }
 
 .hero-content {
@@ -227,6 +295,7 @@ ul {
   height: 100%;
   display: flex;
   align-items: center;
+  z-index: 2;
 }
 
 .hero-grid {
@@ -242,6 +311,8 @@ ul {
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  color: white;
+  max-width: 600px;
 }
 
 .hero-title {
@@ -252,15 +323,14 @@ ul {
 }
 
 .gradient-text {
-  background: linear-gradient(to right, var(--primary), var(--secondary));
+  background: linear-gradient(to right, #ffffff, #f0f0f0);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
 }
 
 .hero-description {
-  max-width: 600px;
-  color: var(--muted-foreground);
+  color: rgba(255, 255, 255, 0.9);
   font-size: 1rem;
 }
 
@@ -269,10 +339,6 @@ ul {
   flex-direction: column;
   gap: 0.5rem;
   margin-top: 0.5rem;
-}
-
-.hero-image {
-  display: none;
 }
 
 /* Buttons */
@@ -298,12 +364,13 @@ ul {
 }
 
 .button.outline {
-  border: 1px solid var(--input);
-  background-color: var(--background);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  background-color: rgba(0, 0, 0, 0.3);
+  color: white;
 }
 
 .button.outline:hover {
-  background-color: var(--accent);
+  background-color: rgba(255, 255, 255, 0.2);
 }
 
 .button.white {
@@ -313,6 +380,15 @@ ul {
 
 .button.white:hover {
   background-color: rgba(255, 255, 255, 0.9);
+}
+
+.dark .button.white {
+  background-color: var(--card);
+  color: var(--primary);
+}
+
+.dark .button.white:hover {
+  background-color: var(--accent);
 }
 
 .button-icon {
@@ -347,10 +423,15 @@ ul {
 .categories-section,
 .products-section {
   padding: 3rem 0;
+  transition: background-color 0.3s ease;
 }
 
 .products-section {
   background: linear-gradient(to right, rgba(0, 160, 255, 0.05), rgba(124, 0, 255, 0.05));
+}
+
+.dark .products-section {
+  background: linear-gradient(to right, rgba(0, 160, 255, 0.03), rgba(124, 0, 255, 0.03));
 }
 
 .section-header {
@@ -384,6 +465,15 @@ ul {
   position: relative;
   overflow: hidden;
   border-radius: var(--radius);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.dark .category-card {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.category-card:hover {
+  transform: translateY(-5px);
 }
 
 .category-image {
@@ -452,12 +542,16 @@ ul {
   overflow: hidden;
   border-radius: var(--radius);
   border: 1px solid var(--border);
-  background-color: var(--background);
-  transition: box-shadow 0.3s;
+  background-color: var(--card);
+  transition: box-shadow 0.3s, transform 0.3s, background-color 0.3s, border-color 0.3s;
 }
 
 .product-card:hover {
   box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+.dark .product-card:hover {
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
 }
 
 .product-image-container {
@@ -564,6 +658,7 @@ ul {
 .footer {
   border-top: 1px solid var(--border);
   background-color: var(--background);
+  transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 .footer-grid {
@@ -690,17 +785,938 @@ ul {
 }
 
 @media (min-width: 1024px) {
-  .hero-grid {
-    grid-template-columns: 1fr 400px;
-    gap: 2.5rem;
+  .hero-gradient {
+    background: linear-gradient(to right, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.3));
   }
 
-  .hero-image {
+  .dark .hero-gradient {
+    background: linear-gradient(to right, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.4));
+  }
+
+  .hero-text {
+    color: white;
+  }
+
+  .hero-description {
+    color: rgba(255, 255, 255, 0.9);
+  }
+
+  .gradient-text {
+    background: linear-gradient(to right, #ffffff, #f0f0f0);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .hero-carousel {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
     display: block;
   }
 
   .footer-grid {
     grid-template-columns: repeat(4, 1fr);
   }
+}
+
+/* Women's Page Styles */
+.women-page {
+  position: relative;
+}
+
+.women-page .products-section {
+  background: linear-gradient(to right, rgba(255, 182, 193, 0.05), rgba(219, 112, 219, 0.05));
+}
+
+.dark .women-page .products-section {
+  background: linear-gradient(to right, rgba(255, 182, 193, 0.02), rgba(219, 112, 219, 0.02));
+}
+
+.women-page .product-card {
+  border-color: rgba(219, 112, 219, 0.2);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.women-page .product-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 30px -10px rgba(219, 112, 219, 0.2);
+}
+
+.dark .women-page .product-card:hover {
+  box-shadow: 0 15px 30px -10px rgba(219, 112, 219, 0.1);
+}
+
+.women-page .section-title {
+  background: linear-gradient(to right, #ff6b98, #da70d6);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.women-hero {
+  background: linear-gradient(135deg, rgba(255, 182, 193, 0.2), rgba(219, 112, 219, 0.2));
+  padding: 4rem 0 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.dark .women-hero {
+  background: linear-gradient(135deg, rgba(255, 182, 193, 0.05), rgba(219, 112, 219, 0.05));
+}
+
+.women-hero::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+  background-size: 20px 20px;
+  opacity: 0.5;
+  animation: drift 60s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes drift {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.women-title {
+  font-size: 3rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  background: linear-gradient(to right, #ff6b98, #da70d6);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  letter-spacing: -0.05em;
+}
+
+.women-subtitle {
+  font-size: 1.25rem;
+  color: var(--muted-foreground);
+  max-width: 600px;
+  margin-bottom: 2rem;
+}
+
+.women-page .text-button.primary {
+  color: #da70d6;
+}
+
+.women-page .text-button.primary:hover {
+  color: #ff6b98;
+}
+
+/* Update the Products component styling when on women's page */
+.women-page .product-title {
+  font-weight: 600;
+}
+
+.women-page .icon-button:hover {
+  background-color: rgba(219, 112, 219, 0.1);
+}
+
+/* Add a subtle glow effect to product images on hover */
+.women-page .product-image-container::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, rgba(219, 112, 219, 0.2), transparent 70%);
+  opacity: 0;
+  transition: opacity 0.3s;
+  pointer-events: none;
+}
+
+.women-page .product-card:hover .product-image-container::after {
+  opacity: 1;
+}
+
+/* Add after the Women's Page Styles section */
+
+/* Men's Page Styles */
+.men-page {
+  position: relative;
+}
+
+.men-page .products-section {
+  background: linear-gradient(to right, rgba(0, 150, 255, 0.05), rgba(0, 210, 255, 0.05));
+}
+
+.dark .men-page .products-section {
+  background: linear-gradient(to right, rgba(0, 150, 255, 0.02), rgba(0, 210, 255, 0.02));
+}
+
+.men-page .product-card {
+  border-color: rgba(0, 180, 255, 0.2);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.men-page .product-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 30px -10px rgba(0, 180, 255, 0.2);
+}
+
+.dark .men-page .product-card:hover {
+  box-shadow: 0 15px 30px -10px rgba(0, 180, 255, 0.1);
+}
+
+.men-page .section-title {
+  background: linear-gradient(to right, #0078d4, #00b7c3);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.men-hero {
+  background: linear-gradient(135deg, rgba(0, 150, 255, 0.2), rgba(0, 210, 255, 0.2));
+  padding: 4rem 0 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.dark .men-hero {
+  background: linear-gradient(135deg, rgba(0, 150, 255, 0.05), rgba(0, 210, 255, 0.05));
+}
+
+.men-hero::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: repeating-linear-gradient(
+    45deg,
+    rgba(255, 255, 255, 0.05) 0px,
+    rgba(255, 255, 255, 0.05) 2px,
+    transparent 2px,
+    transparent 10px
+  );
+  opacity: 0.5;
+  animation: drift 60s linear infinite;
+  pointer-events: none;
+}
+
+.men-title {
+  font-size: 3rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  background: linear-gradient(to right, #0078d4, #00b7c3);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  letter-spacing: -0.05em;
+}
+
+.men-subtitle {
+  font-size: 1.25rem;
+  color: var(--muted-foreground);
+  max-width: 600px;
+  margin-bottom: 2rem;
+}
+
+.men-page .text-button.primary {
+  color: #0078d4;
+}
+
+.men-page .text-button.primary:hover {
+  color: #00b7c3;
+}
+
+/* Update the Products component styling when on men's page */
+.men-page .product-title {
+  font-weight: 600;
+}
+
+.men-page .icon-button:hover {
+  background-color: rgba(0, 180, 255, 0.1);
+}
+
+/* Add a subtle geometric effect to product images on hover */
+.men-page .product-image-container::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(0, 150, 255, 0.2), transparent 70%);
+  opacity: 0;
+  transition: opacity 0.3s;
+  pointer-events: none;
+}
+
+.men-page .product-card:hover .product-image-container::after {
+  opacity: 1;
+}
+
+/* New Arrivals Page Styles */
+.new-arrivals-page {
+  position: relative;
+}
+
+.new-arrivals-page .products-section {
+  background: linear-gradient(to right, rgba(255, 153, 0, 0.05), rgba(255, 94, 0, 0.05));
+}
+
+.dark .new-arrivals-page .products-section {
+  background: linear-gradient(to right, rgba(255, 153, 0, 0.02), rgba(255, 94, 0, 0.02));
+}
+
+.new-arrivals-page .product-card {
+  border-color: rgba(255, 153, 0, 0.2);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.new-arrivals-page .product-card:hover {
+  transform: translateY(-5px) rotate(1deg);
+  box-shadow: 0 15px 30px -10px rgba(255, 153, 0, 0.2);
+}
+
+.dark .new-arrivals-page .product-card:hover {
+  box-shadow: 0 15px 30px -10px rgba(255, 153, 0, 0.1);
+}
+
+.new-arrivals-page .section-title {
+  background: linear-gradient(to right, #ff9900, #ff5e00);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.new-arrivals-hero {
+  background: linear-gradient(135deg, rgba(255, 153, 0, 0.2), rgba(255, 94, 0, 0.2));
+  padding: 4rem 0 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.dark .new-arrivals-hero {
+  background: linear-gradient(135deg, rgba(255, 153, 0, 0.05), rgba(255, 94, 0, 0.05));
+}
+
+.new-arrivals-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(circle at 20% 30%, rgba(255, 255, 255, 0.2) 0%, transparent 20%),
+    radial-gradient(circle at 80% 70%, rgba(255, 255, 255, 0.2) 0%, transparent 20%);
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.new-arrivals-title {
+  font-size: 3rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  background: linear-gradient(to right, #ff9900, #ff5e00);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  letter-spacing: -0.05em;
+}
+
+.new-arrivals-subtitle {
+  font-size: 1.25rem;
+  color: var(--muted-foreground);
+  max-width: 600px;
+  margin-bottom: 2rem;
+}
+
+.new-arrivals-page .text-button.primary {
+  color: #ff9900;
+}
+
+.new-arrivals-page .text-button.primary:hover {
+  color: #ff5e00;
+}
+
+/* Update the Products component styling when on new arrivals page */
+.new-arrivals-page .product-title {
+  font-weight: 600;
+}
+
+.new-arrivals-page .icon-button:hover {
+  background-color: rgba(255, 153, 0, 0.1);
+}
+
+/* Add a starburst effect to product images on hover */
+.new-arrivals-page .product-image-container::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, rgba(255, 153, 0, 0.3), transparent 70%);
+  opacity: 0;
+  transition: opacity 0.3s;
+  pointer-events: none;
+}
+
+.new-arrivals-page .product-card:hover .product-image-container::after {
+  opacity: 1;
+}
+
+/* Add a "New" badge to products on the new arrivals page */
+.new-arrivals-page .product-image-container::before {
+  content: "NEW";
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: linear-gradient(to right, #ff9900, #ff5e00);
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  z-index: 10;
+}
+
+/* Carousel Styles */
+.carousel-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.carousel-slides {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.carousel-slide {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: opacity 0.8s ease;
+}
+
+.carousel-slide.active {
+  opacity: 1;
+  z-index: 1;
+}
+
+.carousel-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.carousel-content {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 1.5rem;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
+  color: white;
+  opacity: 0.7;
+}
+
+.carousel-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.carousel-description {
+  font-size: 0.875rem;
+  opacity: 0.9;
+}
+
+.carousel-indicators {
+  position: absolute;
+  bottom: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 0.75rem;
+  z-index: 20;
+}
+
+.carousel-indicator {
+  width: 0.75rem;
+  height: 0.75rem;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  transition: all 0.2s;
+  border: none;
+  padding: 0;
+}
+
+.carousel-indicator.active {
+  background-color: white;
+  transform: scale(1.2);
+}
+
+.carousel-indicator:hover {
+  background-color: rgba(255, 255, 255, 0.8);
+}
+
+.carousel-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4rem;
+  height: 4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.6);
+  border-radius: 50%;
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s;
+  z-index: 30;
+  opacity: 0.8;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.carousel-arrow:hover {
+  background-color: rgba(0, 0, 0, 0.8);
+  opacity: 1;
+  transform: translateY(-50%) scale(1.05);
+}
+
+.carousel-arrow-left {
+  left: 1.5rem;
+}
+
+.carousel-arrow-right {
+  right: 1.5rem;
+}
+
+.arrow-icon {
+  width: 2rem;
+  height: 2rem;
+}
+
+/* Shopping Cart Styles */
+.cart-button {
+  position: relative;
+}
+
+.cart-count {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: linear-gradient(to right, var(--primary), var(--secondary));
+  color: white;
+  font-size: 0.7rem;
+  font-weight: 600;
+}
+
+.shopping-cart-overlay {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: flex-end;
+  z-index: 100;
+}
+
+.shopping-cart {
+  width: 100%;
+  max-width: 450px;
+  height: 100%;
+  background-color: var(--background);
+  display: flex;
+  flex-direction: column;
+  box-shadow: -5px 0 25px rgba(0, 0, 0, 0.1);
+  animation: slideIn 0.3s ease-out;
+  transition: background-color 0.3s ease;
+}
+
+.dark .shopping-cart {
+  box-shadow: -5px 0 25px rgba(0, 0, 0, 0.3);
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+.shopping-cart-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.shopping-cart-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.shopping-cart-empty {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 2rem;
+  text-align: center;
+}
+
+.shopping-cart-empty-icon {
+  width: 4rem;
+  height: 4rem;
+  color: var(--muted-foreground);
+  opacity: 0.5;
+}
+
+.shopping-cart-items {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1rem;
+}
+
+.shopping-cart-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.shopping-cart-item-image-container {
+  width: 80px;
+  height: 80px;
+  border-radius: var(--radius);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.shopping-cart-item-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.shopping-cart-item-details {
+  flex: 1;
+}
+
+.shopping-cart-item-title {
+  font-weight: 500;
+  margin-bottom: 0.25rem;
+}
+
+.shopping-cart-item-price {
+  font-weight: 600;
+  color: var(--primary);
+  margin-bottom: 0.5rem;
+}
+
+.shopping-cart-item-quantity {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.quantity-button {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius);
+  background-color: var(--muted);
+  font-weight: 600;
+}
+
+.quantity-value {
+  width: 24px;
+  text-align: center;
+}
+
+.shopping-cart-footer {
+  padding: 1.5rem;
+  border-top: 1px solid var(--border);
+}
+
+.shopping-cart-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+
+.shopping-cart-total {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  font-weight: 600;
+  font-size: 1.125rem;
+}
+
+.shopping-cart-actions {
+  display: flex;
+  gap: 1rem;
+}
+
+.shopping-cart-actions .button {
+  flex: 1;
+}
+
+.text-button.danger {
+  color: var(--destructive);
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.text-button.danger:hover {
+  color: #ff3333;
+}
+
+/* Product Quick Add Button */
+.product-image-container {
+  position: relative;
+}
+
+.product-quick-add {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  opacity: 0;
+  transform: translateY(100%);
+  transition: all 0.3s ease;
+}
+
+.product-card:hover .product-quick-add {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Scroll to Top Button */
+.scroll-to-top {
+  position: fixed;
+  bottom: 30px;
+  left: 30px;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+  z-index: 90;
+}
+
+.scroll-to-top.visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+.scroll-to-top-button {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: linear-gradient(to right, var(--primary), var(--secondary));
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+  transition: transform 0.3s ease;
+}
+
+.scroll-to-top-button:hover {
+  transform: translateY(-5px);
+}
+
+/* Chatbot Styles */
+.chatbot-toggle {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: linear-gradient(to right, var(--primary), var(--secondary));
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
+  z-index: 90;
+}
+
+.chatbot-toggle:hover {
+  transform: scale(1.05);
+}
+
+.chatbot-toggle.active {
+  transform: rotate(90deg);
+}
+
+.chatbot-container {
+  position: fixed;
+  bottom: 100px;
+  right: 30px;
+  width: 350px;
+  height: 500px;
+  background-color: var(--background);
+  border-radius: var(--radius);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  z-index: 90;
+  animation: slideUp 0.3s ease-out;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.dark .chatbot-container {
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.chatbot-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+  background: linear-gradient(to right, var(--primary), var(--secondary));
+  color: white;
+}
+
+.chatbot-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+
+.chatbot-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.chatbot-message {
+  padding: 0.75rem 1rem;
+  border-radius: 1rem;
+  max-width: 80%;
+  word-break: break-word;
+}
+
+.chatbot-message.system {
+  background-color: var(--muted);
+  align-self: flex-start;
+  border-bottom-left-radius: 0.25rem;
+}
+
+.chatbot-message.user {
+  background: linear-gradient(to right, var(--primary), var(--secondary));
+  color: white;
+  align-self: flex-end;
+  border-bottom-right-radius: 0.25rem;
+}
+
+.chatbot-message.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+  width: auto;
+}
+
+.spin {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.chatbot-input-container {
+  display: flex;
+  padding: 1rem;
+  border-top: 1px solid var(--border);
+}
+
+.chatbot-input {
+  flex: 1;
+  height: 2.5rem;
+  padding: 0 1rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--input);
+  background-color: var(--background);
+  color: var(--foreground);
+  font-size: 0.875rem;
+  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+}
+
+.chatbot-input:focus {
+  outline: none;
+  border-color: var(--ring);
+  box-shadow: 0 0 0 2px rgba(0, 160, 255, 0.2);
+}
+
+.chatbot-send-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  margin-left: 0.5rem;
+  border-radius: var(--radius);
+  background: linear-gradient(to right, var(--primary), var(--secondary));
+  color: white;
+  transition: opacity 0.2s;
+}
+
+.chatbot-send-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
