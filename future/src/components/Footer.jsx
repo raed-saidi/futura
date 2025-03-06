@@ -1,128 +1,99 @@
+import { Link } from "react-router-dom"
+import { useLanguage } from "../LanguageContext"
+
 function Footer() {
+  const { t } = useLanguage()
+
   return (
     <footer className="footer">
       <div className="container">
         <div className="footer-grid">
-          <div className="footer-column">
-            <h3 className="footer-heading">Shop</h3>
-            <ul className="footer-links">
-              <li>
-                <a href="/women" className="footer-link">
-                  Women
-                </a>
-              </li>
-              <li>
-                <a href="/men" className="footer-link">
-                  Men
-                </a>
-              </li>
-              <li>
-                <a href="/new" className="footer-link">
-                  New Arrivals
-                </a>
-              </li>
-              <li>
-                <a href="/sale" className="footer-link">
-                  Sale
-                </a>
-              </li>
-            </ul>
+          <div>
+            <h3 className="footer-heading">{t("shop")}</h3>
+            <div className="footer-links">
+              <Link to="/women" className="footer-link">
+                {t("women")}
+              </Link>
+              <Link to="/men" className="footer-link">
+                {t("men")}
+              </Link>
+              <Link to="/new" className="footer-link">
+                {t("newArrivals")}
+              </Link>
+              <Link to="/sale" className="footer-link">
+                {t("sale")}
+              </Link>
+            </div>
           </div>
-          <div className="footer-column">
-            <h3 className="footer-heading">Company</h3>
-            <ul className="footer-links">
-              <li>
-                <a href="/about" className="footer-link">
-                  About Us
-                </a>
-              </li>
-              <li>
-                <a href="/careers" className="footer-link">
-                  Careers
-                </a>
-              </li>
-              <li>
-                <a href="/stores" className="footer-link">
-                  Store Locator
-                </a>
-              </li>
-              <li>
-                <a href="/sustainability" className="footer-link">
-                  Sustainability
-                </a>
-              </li>
-            </ul>
+          <div>
+            <h3 className="footer-heading">{t("brands")}</h3>
+            <div className="footer-links">
+              <Link to="/women/premium" className="footer-link">
+                {t("premiumWomen")}
+              </Link>
+              <Link to="/women/luxury" className="footer-link">
+                {t("luxuryWomen")}
+              </Link>
+              <Link to="/men/premium" className="footer-link">
+                {t("premiumMen")}
+              </Link>
+              <Link to="/men/luxury" className="footer-link">
+                {t("luxuryMen")}
+              </Link>
+            </div>
           </div>
-          <div className="footer-column">
-            <h3 className="footer-heading">Support</h3>
-            <ul className="footer-links">
-              <li>
-                <a href="/help" className="footer-link">
-                  Help Center
-                </a>
-              </li>
-              <li>
-                <a href="/returns" className="footer-link">
-                  Returns & Exchanges
-                </a>
-              </li>
-              <li>
-                <a href="/shipping" className="footer-link">
-                  Shipping Information
-                </a>
-              </li>
-              <li>
-                <a href="/contact" className="footer-link">
-                  Contact Us
-                </a>
-              </li>
-            </ul>
+          <div>
+            <h3 className="footer-heading">{t("help")}</h3>
+            <div className="footer-links">
+              <Link to="/faq" className="footer-link">
+                {t("faq")}
+              </Link>
+              <Link to="/shipping" className="footer-link">
+                {t("shippingReturns")}
+              </Link>
+              <Link to="/contact" className="footer-link">
+                {t("contactUs")}
+              </Link>
+              <Link to="/size-guide" className="footer-link">
+                {t("sizeGuide")}
+              </Link>
+            </div>
           </div>
-          <div className="footer-column">
-            <h3 className="footer-heading">Connect</h3>
-            <ul className="footer-links">
-              <li>
-                <a href="#" className="footer-link">
-                  Instagram
-                </a>
-              </li>
-              <li>
-                <a href="#" className="footer-link">
-                  Twitter
-                </a>
-              </li>
-              <li>
-                <a href="#" className="footer-link">
-                  Facebook
-                </a>
-              </li>
-              <li>
-                <a href="#" className="footer-link">
-                  TikTok
-                </a>
-              </li>
-            </ul>
+          <div>
+            <h3 className="footer-heading">{t("followUs")}</h3>
+            <div className="footer-links">
+              <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="footer-link">
+                Instagram
+              </a>
+              <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="footer-link">
+                Twitter
+              </a>
+              <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="footer-link">
+                Facebook
+              </a>
+              <a href="https://pinterest.com" target="_blank" rel="noopener noreferrer" className="footer-link">
+                Pinterest
+              </a>
+            </div>
           </div>
         </div>
         <div className="footer-bottom">
           <div className="footer-bottom-content">
-            <p className="copyright">© 2025 FUTURA. All rights reserved.</p>
+            <p className="copyright">© 2023 OnlyBrands. {t("allRightsReserved")}</p>
             <div className="legal-links">
-              <a href="/privacy" className="legal-link">
-                Privacy Policy
-              </a>
-              <a href="/terms" className="legal-link">
-                Terms of Service
-              </a>
-              <a href="/cookies" className="legal-link">
-                Cookie Policy
-              </a>
+              <Link to="/privacy" className="legal-link">
+                {t("privacyPolicy")}
+              </Link>
+              <Link to="/terms" className="legal-link">
+                {t("termsOfService")}
+              </Link>
             </div>
           </div>
         </div>
       </div>
     </footer>
-  );
+  )
 }
 
-export default Footer;
+export default Footer
+
