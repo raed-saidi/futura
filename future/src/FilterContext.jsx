@@ -9,31 +9,28 @@ export function FilterProvider({ children }) {
     type: [],
     color: [],
     size: [],
-    priceRange: { min: 0, max: 10000 },
+    priceRange: { min: 0, max: 15000 },
   })
 
-  const applyFilter = (filterType, value) => {
+  const updateFilters = (filterType, value) => {
     setFilters((prevFilters) => {
-      // For array filters (type, color, size)
-      if (Array.isArray(prevFilters[filterType])) {
-        // If value is already in the array, remove it (toggle off)
-        if (prevFilters[filterType].includes(value)) {
-          return {
-            ...prevFilters,
-            [filterType]: prevFilters[filterType].filter((item) => item !== value),
-          }
-        }
-        // Otherwise add it (toggle on)
-        return {
-          ...prevFilters,
-          [filterType]: [...prevFilters[filterType], value],
-        }
+      // If it's a price range update
+      if (filterType === "priceRange") {
+        return { ...prevFilters, priceRange: value }
       }
-      // For price range
-      return {
-        ...prevFilters,
-        [filterType]: value,
+
+      // For array-based filters (type, color, size)
+      const currentValues = [...prevFilters[filterType]]
+      const valueIndex = currentValues.indexOf(value)
+
+      // Toggle the value (add if not present, remove if present)
+      if (valueIndex === -1) {
+        currentValues.push(value)
+      } else {
+        currentValues.splice(valueIndex, 1)
       }
+
+      return { ...prevFilters, [filterType]: currentValues }
     })
   }
 
@@ -42,11 +39,11 @@ export function FilterProvider({ children }) {
       type: [],
       color: [],
       size: [],
-      priceRange: { min: 0, max: 10000 },
+      priceRange: { min: 0, max: 15000 },
     })
   }
 
-  const filterProducts = (products) => {
+  const applyFilters = (products) => {
     return products.filter((product) => {
       // Filter by type
       if (filters.type.length > 0 && !filters.type.includes(product.type)) {
@@ -54,12 +51,12 @@ export function FilterProvider({ children }) {
       }
 
       // Filter by color
-      if (filters.color.length > 0 && !product.colors.some((color) => filters.color.includes(color))) {
+      if (filters.color.length > 0 && !filters.color.includes(product.color)) {
         return false
       }
 
-      // Filter by size
-      if (filters.size.length > 0 && !product.sizes.some((size) => filters.size.includes(size))) {
+      // Filter by size (check if any of the product sizes match the selected sizes)
+      if (filters.size.length > 0 && !product.size.some((s) => filters.size.includes(s))) {
         return false
       }
 
@@ -73,7 +70,7 @@ export function FilterProvider({ children }) {
   }
 
   return (
-    <FilterContext.Provider value={{ filters, applyFilter, clearFilters, filterProducts }}>
+    <FilterContext.Provider value={{ filters, updateFilters, clearFilters, applyFilters }}>
       {children}
     </FilterContext.Provider>
   )

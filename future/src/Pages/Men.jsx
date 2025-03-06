@@ -1,9 +1,10 @@
 "use client"
 
+import { useState } from "react"
+import { Link } from "react-router-dom"
 import Products from "../components/Products"
 import { useLanguage } from "../LanguageContext"
-import { Link } from "react-router-dom"
-import { useState } from "react"
+import { menProducts } from "../data/menProducts"
 
 function Men() {
   const { t } = useLanguage()
@@ -33,7 +34,7 @@ function Men() {
         </div>
       </div>
       <div className="container">
-        <Products category="men" />
+        <Products products={menProducts} category="men" />
       </div>
     </div>
   )

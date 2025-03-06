@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Search, ShoppingBag, User, Menu, X } from "lucide-react"
 import { Link } from "react-router-dom"
 import { useCart } from "../CartContext"
@@ -13,9 +13,26 @@ function Header() {
   const { t } = useLanguage()
   const [searchQuery, setSearchQuery] = useState("")
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
 
   // Calculate total items in cart
   const itemCount = cart.reduce((count, item) => count + item.quantity, 0)
+
+  // Check if the screen is mobile
+  useEffect(() => {
+    const checkIfMobile = () => {
+      setIsMobile(window.innerWidth < 768)
+    }
+
+    // Initial check
+    checkIfMobile()
+
+    // Add event listener
+    window.addEventListener("resize", checkIfMobile)
+
+    // Clean up
+    return () => window.removeEventListener("resize", checkIfMobile)
+  }, [])
 
   const handleSearch = (e) => {
     e.preventDefault()
@@ -28,7 +45,21 @@ function Header() {
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen)
+    // Prevent scrolling when mobile menu is open
+    if (!isMobileMenuOpen) {
+      document.body.style.overflow = "hidden"
+    } else {
+      document.body.style.overflow = "auto"
+    }
   }
+
+  // Close mobile menu when screen size changes from mobile to desktop
+  useEffect(() => {
+    if (!isMobile && isMobileMenuOpen) {
+      setIsMobileMenuOpen(false)
+      document.body.style.overflow = "auto"
+    }
+  }, [isMobile, isMobileMenuOpen])
 
   return (
     <header className="header">
@@ -37,7 +68,7 @@ function Header() {
           <Link to="/" className="logo">
             OnlyBrands
           </Link>
-          <nav className={`main-nav ${isMobileMenuOpen ? "mobile-open" : ""}`}>
+          <nav className={`main-nav ${isMobileMenuOpen && isMobile ? "mobile-open" : ""}`}>
             <div className="nav-dropdown">
               <Link to="/women" className="nav-link">
                 {t("women")}
@@ -104,14 +135,16 @@ function Header() {
             <ShoppingBag className="icon" />
             {itemCount > 0 && <span className="cart-count">{itemCount}</span>}
           </button>
-          <button className="icon-button mobile-menu-toggle" onClick={toggleMobileMenu}>
-            {isMobileMenuOpen ? <X className="icon" /> : <Menu className="icon" />}
-          </button>
+          {isMobile && (
+            <button className="icon-button mobile-menu-toggle" onClick={toggleMobileMenu}>
+              {isMobileMenuOpen ? <X className="icon" /> : <Menu className="icon" />}
+            </button>
+          )}
         </div>
       </div>
 
       {/* Mobile menu overlay */}
-      {isMobileMenuOpen && (
+      {isMobileMenuOpen && isMobile && (
         <div className="mobile-menu-overlay" onClick={toggleMobileMenu}>
           <div className="mobile-menu" onClick={(e) => e.stopPropagation()}>
             <div className="mobile-menu-header">

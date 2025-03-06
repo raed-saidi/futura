@@ -13,6 +13,9 @@ const translations = {
     premium: "Premium Brands",
     luxury: "Luxury Brands",
 
+    // Navigation
+    allProducts: "All Products",
+
     // Women's pages
     womenCollection: "Women's Collection",
     womenSubtitle: "Elegance meets innovation in our curated selection",
@@ -40,6 +43,17 @@ const translations = {
     // Products
     viewAllProducts: "View All Products",
     addToCart: "Add to Cart",
+    noProductsFound: "No products found matching your filters.",
+
+    // Filters
+    filters: "Filters",
+    clearFilters: "Clear Filters",
+    productType: "Product Type",
+    color: "Color",
+    size: "Size",
+    priceRange: "Price Range",
+    min: "Min",
+    max: "Max",
 
     // Footer
     shop: "Shop",
@@ -113,6 +127,9 @@ const translations = {
     premium: "Marques Premium",
     luxury: "Marques de Luxe",
 
+    // Navigation
+    allProducts: "Tous les Produits",
+
     // Women's pages
     womenCollection: "Collection Femmes",
     womenSubtitle: "L'élégance rencontre l'innovation dans notre sélection",
@@ -140,6 +157,17 @@ const translations = {
     // Products
     viewAllProducts: "Voir Tous les Produits",
     addToCart: "Ajouter au Panier",
+    noProductsFound: "Aucun produit ne correspond à vos filtres.",
+
+    // Filters
+    filters: "Filtres",
+    clearFilters: "Effacer les Filtres",
+    productType: "Type de Produit",
+    color: "Couleur",
+    size: "Taille",
+    priceRange: "Fourchette de Prix",
+    min: "Min",
+    max: "Max",
 
     // Footer
     shop: "Boutique",

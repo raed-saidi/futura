@@ -1079,7 +1079,6 @@ ul {
   pointer-events: none;
 }
 
-
 @keyframes drift {
   0% {
     transform: rotate(0deg);
@@ -2190,10 +2189,13 @@ ul {
   padding: 0.5rem 1.5rem;
   border-radius: var(--radius);
   background-color: rgba(255, 255, 255, 0.2);
-  color: var(--foreground);
+  color: white;
+  font-size: 0.875rem;
   font-weight: 500;
   transition: all 0.2s;
-  border: 1px solid transparent;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
 }
 
 .category-tab:hover {
@@ -2201,8 +2203,8 @@ ul {
 }
 
 .category-tab.active {
-  background-color: var(--primary);
-  color: white;
+  background-color: white;
+  color: var(--primary);
 }
 
 .dark .category-tab {
@@ -2210,15 +2212,12 @@ ul {
 }
 
 .dark .category-tab:hover {
-  background-color: rgba(255, 255, 255, 0.15);
+  background-color: rgba(255, 255, 255, 0.2);
 }
 
-/* Products Container */
-.products-container {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  width: 100%;
+.dark .category-tab.active {
+  background-color: var(--card);
+  color: var(--primary);
 }
 
 /* Filter Button */
@@ -2234,15 +2233,15 @@ ul {
   gap: 0.5rem;
   padding: 0.5rem 1rem;
   border-radius: var(--radius);
-  background-color: var(--muted);
-  color: var(--foreground);
+  background-color: var(--accent);
+  color: var(--accent-foreground);
   font-size: 0.875rem;
   font-weight: 500;
-  transition: background-color 0.2s;
+  transition: all 0.2s;
 }
 
 .filter-button:hover {
-  background-color: var(--accent);
+  background-color: var(--muted);
 }
 
 /* Filter Sidebar */
@@ -2253,58 +2252,198 @@ ul {
   right: 0;
   bottom: 0;
   background-color: rgba(0, 0, 0, 0.5);
-  z-index: 40;
+  z-index: 100;
   display: flex;
-  justify-content: flex-start;
+  justify-content: flex-end;
+}
+
+.filter-sidebar-container {
+  height: 100%;
+  width: 100%;
+  max-width: 350px;
+  background-color: var(--background);
+  box-shadow: -5px 0 25px rgba(0, 0, 0, 0.1);
+  animation: slideIn 0.3s ease-out;
+  overflow-y: auto;
+}
+
+.dark .filter-sidebar-container {
+  box-shadow: -5px 0 25px rgba(0, 0, 0, 0.3);
 }
 
 .filter-sidebar {
-  width: 100%;
-  max-width: 300px;
-  height: 100%;
-  background-color: var(--background);
-  box-shadow: 5px 0 25px rgba(0, 0, 0, 0.1);
-  animation: slideInLeft 0.3s ease-out;
-  overflow-y: auto;
+  padding: 1.5rem;
   display: flex;
   flex-direction: column;
+  gap: 1.5rem;
 }
 
-.dark .filter-sidebar {
-  box-shadow: 5px 0 25px rgba(0, 0, 0, 0.3);
+.filter-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
 }
 
-@keyframes slideInLeft {
-  from {
-    transform: translateX(-100%);
-  }
-  to {
-    transform: translateX(0);
-  }
+.filter-title {
+  font-size: 1.25rem;
+  font-weight: 600;
 }
 
-/* No Products Message */
-.no-products-message {
-  grid-column: 1 / -1;
+.filter-section {
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 1.5rem;
+}
+
+.filter-section:last-child {
+  border-bottom: none;
+}
+
+.filter-section-title {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.filter-options {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.filter-option {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+}
+
+.filter-option input[type="checkbox"] {
+  width: 1rem;
+  height: 1rem;
+  cursor: pointer;
+}
+
+.filter-option-label {
+  font-size: 0.875rem;
+}
+
+.size-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.size-option {
+  flex-direction: column;
+  align-items: center;
+  padding: 0.5rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  min-width: 3rem;
   text-align: center;
-  padding: 3rem 0;
+}
+
+.size-option:hover {
+  background-color: var(--accent);
+}
+
+.color-swatch {
+  width: 1rem;
+  height: 1rem;
+  border-radius: 50%;
+  margin-left: auto;
+  border: 1px solid var(--border);
+}
+
+.price-range {
+  margin-top: 1rem;
+}
+
+.price-inputs {
+  display: flex;
+  gap: 1rem;
+}
+
+.price-input-group {
+  flex: 1;
+}
+
+.price-input-group label {
+  display: block;
+  font-size: 0.75rem;
+  margin-bottom: 0.25rem;
   color: var(--muted-foreground);
 }
 
-/* Mobile Menu Toggle - Only show on mobile */
-.mobile-menu-toggle {
-  display: none;
+.price-input-wrapper {
+  position: relative;
 }
 
+.currency-symbol {
+  position: absolute;
+  left: 0.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--muted-foreground);
+}
+
+.price-input {
+  width: 100%;
+  padding: 0.5rem 0.5rem 0.5rem 1.5rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background-color: var(--background);
+  color: var(--foreground);
+}
+
+.filter-actions {
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: center;
+}
+
+.products-container {
+  position: relative;
+}
+
+.no-products-message {
+  text-align: center;
+  padding: 3rem;
+  color: var(--muted-foreground);
+}
+
+/* Mobile Menu Fixes */
 @media (max-width: 767px) {
+  .mobile-menu-overlay {
+    z-index: 1000;
+  }
+
+  .mobile-menu {
+    z-index: 1001;
+    overflow-y: auto;
+  }
+
   .mobile-menu-toggle {
     display: flex;
   }
-}
 
-/* Make sure the burger menu only shows on mobile */
-@media (min-width: 768px) {
-  .mobile-menu-toggle {
-    display: none !important;
+  .main-nav {
+    display: none;
+  }
+
+  .main-nav.mobile-open {
+    display: none; /* We're using the mobile menu overlay instead */
   }
 }
+
+@media (min-width: 768px) {
+  .main-nav {
+    display: flex;
+  }
+
+  .mobile-menu-toggle {
+    display: none;
+  }
+}
+

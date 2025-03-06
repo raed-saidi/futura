@@ -4,78 +4,17 @@ import { useState, useEffect } from "react"
 import { ChevronRight, ShoppingBag, Plus, Filter } from "lucide-react"
 import { useCart } from "../CartContext"
 import { useLanguage } from "../LanguageContext"
+import { useFilter } from "../FilterContext"
+import FilterSidebar from "./FilterSidebar"
 
-// Sample product data for premium brands
-const premiumProducts = [
-  {
-    id: 1,
-    title: "Ethereal Dress",
-    subtitle: "Calvin Klein",
-    price: 199.99,
-    image: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=720&auto=format&fit=crop",
-  },
-  {
-    id: 2,
-    title: "Futuristic Blouse",
-    subtitle: "Tommy Hilfiger",
-    price: 129.99,
-    image: "https://images.unsplash.com/photo-1529139574466-a303027c1d8b?q=80&w=720&auto=format&fit=crop",
-  },
-  {
-    id: 3,
-    title: "Modern Jacket",
-    subtitle: "Ralph Lauren",
-    price: 249.99,
-    image: "https://images.unsplash.com/photo-1496747611176-843222e1e57c?q=80&w=720&auto=format&fit=crop",
-  },
-  {
-    id: 4,
-    title: "Elegant Skirt",
-    subtitle: "Michael Kors",
-    price: 159.99,
-    image: "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=720&auto=format&fit=crop",
-  },
-]
-
-// Sample product data for luxury brands
-const luxuryProducts = [
-  {
-    id: 5,
-    title: "Minimalist Top",
-    subtitle: "Gucci",
-    price: 589.99,
-    image: "https://images.unsplash.com/photo-1485968579580-b6d095142e6e?q=80&w=720&auto=format&fit=crop",
-  },
-  {
-    id: 6,
-    title: "Statement Pants",
-    subtitle: "Louis Vuitton",
-    price: 879.99,
-    image: "https://images.unsplash.com/photo-1509631179647-0177331693ae?q=80&w=720&auto=format&fit=crop",
-  },
-  {
-    id: 7,
-    title: "Futuristic Shoes",
-    subtitle: "Prada",
-    price: 1219.99,
-    image: "https://images.unsplash.com/photo-1543163521-1bf539c55dd2?q=80&w=720&auto=format&fit=crop",
-  },
-  {
-    id: 8,
-    title: "Ethereal Accessory",
-    subtitle: "Chanel",
-    price: 979.99,
-    image: "https://images.unsplash.com/photo-1611085583191-a3b181a88401?q=80&w=720&auto=format&fit=crop",
-  },
-]
-
-function Products({ category, brandType = "all" }) {
+function Products({ products, category, brandType = "all" }) {
   const [title, setTitle] = useState("Featured Products")
   const [description, setDescription] = useState("Our most popular items, handpicked for you.")
-  const [products, setProducts] = useState([])
+  const [filteredProducts, setFilteredProducts] = useState([])
   const [isFilterOpen, setIsFilterOpen] = useState(false)
   const { addToCart } = useCart()
   const { t } = useLanguage()
+  const { applyFilters } = useFilter()
 
   useEffect(() => {
     // Set title and description based on category and brand type
@@ -114,15 +53,17 @@ function Products({ category, brandType = "all" }) {
       }
     }
 
-    // Set products based on brand type
+    // Filter products based on brand type if specified
+    let productsToShow = products
     if (brandType === "premium") {
-      setProducts(premiumProducts)
+      productsToShow = products.filter((product) => product.category === "premium")
     } else if (brandType === "luxury") {
-      setProducts(luxuryProducts)
-    } else {
-      setProducts([...premiumProducts, ...luxuryProducts])
+      productsToShow = products.filter((product) => product.category === "luxury")
     }
-  }, [category, brandType])
+
+    // Apply any active filters
+    setFilteredProducts(applyFilters(productsToShow))
+  }, [category, brandType, products, applyFilters])
 
   const toggleFilter = () => {
     setIsFilterOpen(!isFilterOpen)
@@ -152,45 +93,50 @@ function Products({ category, brandType = "all" }) {
           {/* Filter sidebar */}
           {isFilterOpen && (
             <div className="filter-overlay" onClick={toggleFilter}>
-              <div className="filter-sidebar">
-                {/* Filter content would go here */}
-                <h3>Filters</h3>
+              <div className="filter-sidebar-container" onClick={(e) => e.stopPropagation()}>
+                <FilterSidebar products={products} onClose={toggleFilter} />
               </div>
             </div>
           )}
 
           {/* Products grid */}
           <div className="products-grid">
-            {products.map((product) => (
-              <div key={product.id} className="product-card">
-                <div className="product-image-container">
-                  <img src={product.image || "/placeholder.svg"} alt={product.title} className="product-image" />
-                  <button
-                    className="product-quick-add"
-                    onClick={() => addToCart(product)}
-                    aria-label={`${t("addToCart")} ${product.title}`}
-                  >
-                    <Plus className="icon-small" />
-                    {t("addToCart")}
-                  </button>
-                </div>
-                <div className="product-details">
-                  <h3 className="product-title">{product.title}</h3>
-                  <p className="product-subtitle">{product.subtitle}</p>
-                  <div className="product-footer">
-                    <span className="product-price">${product.price.toFixed(2)}</span>
+            {filteredProducts.length > 0 ? (
+              filteredProducts.map((product) => (
+                <div key={product.id} className="product-card">
+                  <div className="product-image-container">
+                    <img src={product.image || "/placeholder.svg"} alt={product.title} className="product-image" />
                     <button
-                      className="icon-button small"
+                      className="product-quick-add"
                       onClick={() => addToCart(product)}
                       aria-label={`${t("addToCart")} ${product.title}`}
                     >
-                      <ShoppingBag className="icon-small" />
-                      <span className="sr-only">{t("addToCart")}</span>
+                      <Plus className="icon-small" />
+                      {t("addToCart")}
                     </button>
                   </div>
+                  <div className="product-details">
+                    <h3 className="product-title">{product.title}</h3>
+                    <p className="product-subtitle">{product.subtitle}</p>
+                    <div className="product-footer">
+                      <span className="product-price">${product.price.toFixed(2)}</span>
+                      <button
+                        className="icon-button small"
+                        onClick={() => addToCart(product)}
+                        aria-label={`${t("addToCart")} ${product.title}`}
+                      >
+                        <ShoppingBag className="icon-small" />
+                        <span className="sr-only">{t("addToCart")}</span>
+                      </button>
+                    </div>
+                  </div>
                 </div>
+              ))
+            ) : (
+              <div className="no-products-message">
+                <p>{t("noProductsFound")}</p>
               </div>
-            ))}
+            )}
           </div>
         </div>
       </div>
