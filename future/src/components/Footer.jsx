@@ -1,8 +1,15 @@
+"use client"
+
 import { Link } from "react-router-dom"
 import { useLanguage } from "../LanguageContext"
 
 function Footer() {
   const { t } = useLanguage()
+
+  const resetIntroAnimation = () => {
+    localStorage.removeItem("hasVisitedBefore")
+    window.location.href = "/"
+  }
 
   return (
     <footer className="footer">
@@ -57,6 +64,13 @@ function Footer() {
               <Link to="/size-guide" className="footer-link">
                 {t("sizeGuide")}
               </Link>
+              <button
+                onClick={resetIntroAnimation}
+                className="footer-link"
+                style={{ background: "none", border: "none", cursor: "pointer", textAlign: "left" }}
+              >
+                Reset Intro
+              </button>
             </div>
           </div>
           <div>

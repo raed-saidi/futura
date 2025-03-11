@@ -4,12 +4,12 @@ import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Home from "./Pages/Home";
 import Women from "./Pages/Women";
-import WomenPremium from "./Pages/womenPremium";
-import WomenLuxury from "./Pages/womenLuxury";
-import Men from "./pages/Men";
+import WomenPremium from "./Pages/WomenPremium";
+import WomenLuxury from "./Pages/WomenLuxury";
+import Men from "./Pages/Men";
 import MenPremium from "./Pages/MenPremium";
 import MenLuxury from "./Pages/MenLuxury";
-import NewArrivals from "./pages/NewArrivals";
+import NewArrivals from "./Pages/NewArrivals";
 import NewArrivalsPremium from "./Pages/NewArrivalsPremium";
 import NewArrivalsLuxury from "./Pages/NewArrivalsLuxury";
 import ShoppingCart from "./components/ShoppingCart";
@@ -22,6 +22,8 @@ import AboutUs from "./Pages/AboutUs";
 import WorkInProgress from "./Pages/WorkInProgress";
 
 function App() {
+  console.log("App is rendering!");
+
   return (
     <LanguageProvider>
       <ThemeProvider>

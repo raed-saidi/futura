@@ -145,6 +145,6 @@ const menProducts = [
     },
   ]
   
-  export default menProducts
+  export default menProducts;
   
   
